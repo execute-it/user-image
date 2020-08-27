@@ -705,7 +705,8 @@ echo "\[\e[1;31m\]*\[\e[0m\]"; fi) ${DARKGREY}] "; fi )
 PROMPT_COMMAND='__setprompt'
 
 GREEN="\033[0;32m"
-__setprompt
+
+cd ~
 echo -e "${GREEN}Connected to execute.it console!${NOCOLOR} "
 
 ## Set the prompt to display the current git branch
