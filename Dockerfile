@@ -26,4 +26,4 @@ RUN adduser --disabled-password -u ${UID} ${USER}
 
 USER ${UID}:${GID}
 
-ENTRYPOINT bash
+ENTRYPOINT node app.js

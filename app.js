@@ -1,9 +1,12 @@
 const express = require('express');
 const expressWs = require('express-ws');
-const os = require('os');
+const cors = require('cors');
 const pty = require('node-pty');
 
 const app = express();
+
+app.use(cors())
+
 expressWs(app);
 
 let terminals = {}, logs = {};
