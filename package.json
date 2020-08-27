@@ -1,0 +1,24 @@
+{
+  "name": "user-image",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/execute-it/user-image.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/execute-it/user-image/issues"
+  },
+  "homepage": "https://github.com/execute-it/user-image#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-ws": "^4.0.0",
+    "node-pty": "^0.9.0"
+  }
+}
