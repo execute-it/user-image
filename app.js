@@ -30,6 +30,7 @@ app.post('/terminals', (req, res) => {
 
     console.log('Created terminal with PID: ' + term.pid);
     terminals[term.pid] = term;
+    logs[term.pid] = ""
     term.on('data', function(data) {
         logs[term.pid]+=data;
     });
@@ -92,4 +93,7 @@ app.ws('/terminals/:pid', function (ws, req) {
     });
 });
 
-app.listen(process.env.PORT || 8888, '0.0.0.0')
+const port = process.env.PORT || 8888
+app.listen(port, '0.0.0.0', ()=>{
+    console.log(`Listening at 0.0.0.0:${port}`)
+})
