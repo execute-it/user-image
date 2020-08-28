@@ -34,4 +34,5 @@ RUN chmod 600 -R /server/
 # Don't allow bashrc modification (deletion is allowed)
 RUN chmod 444 /home/${USER}/.bashrc
 
+EXPOSE 8888
 ENTRYPOINT node app.js & bash
