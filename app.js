@@ -52,7 +52,8 @@ app.post('/terminals/:pid/size', (req, res) => {
 app.ws('/terminals/:pid', function (ws, req) {
     let term = terminals[parseInt(req.params.pid)];
     console.log('Connected to terminal ' + term.pid);
-    ws.send(logs[term.pid]);
+    if(ws.readyState===1)
+        ws.send(logs[term.pid]);
 
     // binary message buffering
     function bufferUtf8(socket, timeout) {
@@ -64,7 +65,8 @@ app.ws('/terminals/:pid', function (ws, req) {
             length += data.length;
             if (!sender) {
                 sender = setTimeout(() => {
-                    socket.send(Buffer.concat(buffer, length));
+                    if(socket.readyState===1)
+                        socket.send(Buffer.concat(buffer, length));
                     buffer = [];
                     sender = null;
                     length = 0;
@@ -77,6 +79,10 @@ app.ws('/terminals/:pid', function (ws, req) {
     term.on('data', function(data) {
         try {
             send(data);
+            term.on('exit', ()=>{
+                    // send(new Buffer.from("Disconnected from console"))
+                    ws.close();
+            })
         } catch (ex) {
             // The WebSocket is not open, ignore
         }
