@@ -2,10 +2,13 @@ const express = require('express');
 const expressWs = require('express-ws');
 const cors = require('cors');
 const pty = require('node-pty');
+const fs = require('fs');
+const bodyParser = require('body-parser')
 
 const app = express();
 
 app.use(cors())
+app.use(bodyParser.json());
 
 expressWs(app);
 
@@ -30,8 +33,6 @@ app.post('/terminals', (req, res) => {
             gid: gid
         });
 
-    // term.write("su user11\n\r")
-
     console.log('Created terminal with PID: ' + term.pid);
     terminals[term.pid] = term;
     logs[term.pid] = ""
@@ -52,6 +53,37 @@ app.post('/terminals/:pid/size', (req, res) => {
     console.log('Resized terminal ' + pid + ' to ' + cols + ' cols and ' + rows + ' rows.');
     res.end();
 });
+
+app.post('/file/:path(*)', (req, res)=>{
+    const data = req.body.data;
+    const dataBuf = new Buffer.from(data, 'base64');
+    const dataDecoded = dataBuf.toString() + "\n\r";
+
+    // Use /home/user as cwd
+    if(req.params.path[0]!=='/' && req.params.path[0]!=='~')
+        req.params.path = "/home/user/" + req.params.path;
+    // Absolute path
+    const path = require('path').resolve(req.params.path)
+
+    if(!path.startsWith("/home/user/")){
+        // Writing to directories other than /home/user not allowed
+        res.statusCode = 400;
+        res.json({status: "Writing to directories other than /home/user not allowed"});
+        res.end();
+    } else {
+        // Write file
+        fs.writeFile(path, dataDecoded, (err => {
+            if (err) {
+                res.statusCode = 400;
+                res.json({status: "Invalid file path or operation not permitted"});
+                res.end();
+            } else {
+                res.json({status: "success"});
+                res.end();
+            }
+        }))
+    }
+})
 
 app.ws('/terminals/:pid', function (ws, req) {
     let term = terminals[parseInt(req.params.pid)];
