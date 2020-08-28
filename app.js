@@ -13,8 +13,9 @@ let terminals = {}, logs = {};
 app.post('/terminals', (req, res) => {
     const env = Object.assign({}, process.env);
     env['COLORTERM'] = 'truecolor';
-
-    const userID = 2; // UserID of User
+    env['HOME'] = `/home/${env['USER']}`
+    const uid = parseInt(process.env.UID) || 2; // UID of User
+    const gid = parseInt(process.env.GID) || 2; // GID of User
 
     const cols = parseInt(req.query.cols),
         rows = parseInt(req.query.rows),
@@ -22,11 +23,14 @@ app.post('/terminals', (req, res) => {
             name: 'xterm-256color',
             cols: cols || 80,
             rows: rows || 24,
-            cwd: env.PWD,
+            cwd: env['HOME'],
             env: env,
             encoding: null,
-            uid: userID
+            uid,
+            gid: gid
         });
+
+    // term.write("su user11\n\r")
 
     console.log('Created terminal with PID: ' + term.pid);
     terminals[term.pid] = term;
@@ -76,13 +80,15 @@ app.ws('/terminals/:pid', function (ws, req) {
     }
     const send = bufferUtf8(ws, 5);
 
+
+    term.on('exit', ()=>{
+        // send(new Buffer.from("Disconnected from console"))
+        ws.close();
+    })
+
     term.on('data', function(data) {
         try {
             send(data);
-            term.on('exit', ()=>{
-                    // send(new Buffer.from("Disconnected from console"))
-                    ws.close();
-            })
         } catch (ex) {
             // The WebSocket is not open, ignore
         }
