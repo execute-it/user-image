@@ -13,6 +13,7 @@ WORKDIR /server/
 RUN npm i
 
 COPY app.js /server/
+COPY autosave.js /server/
 
 ARG USER=user
 ARG UID=111

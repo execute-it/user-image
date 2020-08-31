@@ -1,3 +1,5 @@
+const autoSave = require('./autosave')
+
 const express = require('express');
 const expressWs = require('express-ws');
 const cors = require('cors');
@@ -141,3 +143,9 @@ const port = process.env.PORT || 8888
 app.listen(port, '0.0.0.0', ()=>{
     console.log(`Listening at 0.0.0.0:${port}`)
 })
+
+const intervalToSave = 5000;
+
+setInterval(()=>{
+    autoSave(process.env.PROJECT_ID)
+}, intervalToSave)
