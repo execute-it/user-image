@@ -131,7 +131,10 @@ app.ws('/terminals/:pid', function(ws, req) {
         }
     });
     ws.on('message', function(msg) {
-        term.write(msg);
+        if(msg==='e.x.e.p.i.n.g') {
+            ws.send("")
+        }else
+            term.write(msg);
     });
     ws.on('close', function() {
         term.kill();
