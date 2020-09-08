@@ -7,10 +7,12 @@ RUN apk add nodejs npm bash make grep
 RUN apk add gcc g++ py3-pip python3 curl py-pip python2 nano vim git
 
 COPY package.json /server/
+COPY ecosystem.config.js /server/
 
 WORKDIR /server/
 
 RUN npm i
+RUN npm i pm2@latest -g
 
 COPY app.js /server/
 COPY autosave.js /server/
@@ -36,4 +38,4 @@ RUN chmod 600 -R /server/
 RUN chmod 444 /home/${USER}/.bashrc
 
 EXPOSE 8888
-ENTRYPOINT node app.js & bash
+ENTRYPOINT bash -c "pm2-runtime ecosystem.config.js --restart-delay=100"
