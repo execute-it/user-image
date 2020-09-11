@@ -8,6 +8,7 @@ RUN apk add gcc g++ py3-pip python3 curl py-pip python2 nano vim git
 
 WORKDIR /home/user/
 
+
 ARG USER=user
 ARG UID=111
 ARG GID=111
@@ -23,12 +24,9 @@ COPY image-addon-files/.bashrc /home/${USER}/
 
 # Remote User restrictions
 
-# Allow only rw for root, and no access to others
-RUN chmod 600 -R /server/
 # Don't allow bashrc modification (deletion is allowed)
 RUN chmod 444 /home/${USER}/.bashrc
 
 USER user
 
-#EXPOSE 8888
 ENTRYPOINT bash
