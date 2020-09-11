@@ -5,30 +5,14 @@ name: Node.js Docker CI/CD
 
 on:
   push:
-    branches: [ master, dev ]
+    branches: [ master ]
   pull_request:
     branches: [ master ]
 
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [12.x]
-
-    steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-      - run: npm i
-      - run: npm run pretest
-
   # Run for master only
   build-and-publish-latest:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master' # Running this job only for master branch
 
     steps:
       - uses: actions/checkout@v2 # Checking out the repo
