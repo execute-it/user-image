@@ -20,13 +20,14 @@ ENV USER=${USER}
 RUN adduser --disabled-password -u ${UID} ${USER}
 
 # Copy addon files
-COPY image-addon-files/.bashrc /home/${USER}/
+COPY image-addon-files/.bashrc /home/
+COPY image-addon-files/setup.sh /home/
 
 # Remote User restrictions
 
 # Don't allow bashrc modification (deletion is allowed)
-RUN chmod 444 /home/${USER}/.bashrc
+RUN chmod 444 /home/.bashrc
 
-USER user
+RUN chown -R user /home/user/
 
-ENTRYPOINT bash
+ENTRYPOINT sleep infinity
