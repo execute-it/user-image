@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Nothing on given port - Execute-it</title>
+    <script>
+        const port = location.href.split('/')[4].split('?')[0];
+        document.title = `Nothing on port ${port} - Execute-it`
+    </script>
+    <style>
+        body {
+            width: 35em;
+            margin: 0 auto;
+            text-align: center;
+            font-family: Tahoma, Verdana, Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+<h1>No process listening on port <script>document.write(port)</script>!
+</h1>
+<p>Sorry, the port
+    <script>document.write(port)</script>
+    is not listened to by any process.<br/>
+    Please try again by ensuring proper ports are opened.
+</p>
+<p><em>Faithfully yours, Team Execute-it.</em></p>
+</body>
+</html>

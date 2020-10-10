@@ -1,10 +1,12 @@
-FROM alpine:latest
+FROM nginx:alpine
 
 # Server deps
 RUN apk add nodejs npm bash make grep
 
 # User programs
 RUN apk add gcc g++ py3-pip python3 curl py-pip python2 nano vim git
+
+RUN apk add bind
 
 WORKDIR /home/user/
 
@@ -22,6 +24,8 @@ RUN adduser --disabled-password -u ${UID} ${USER}
 # Copy addon files
 COPY image-addon-files/.bashrc /home/
 COPY image-addon-files/setup.sh /home/
+COPY image-addon-files/nginx.conf /etc/nginx/
+COPY image-addon-files/502.html /usr/share/nginx/html/
 
 # Remote User restrictions
 
@@ -29,5 +33,7 @@ COPY image-addon-files/setup.sh /home/
 RUN chmod 444 /home/.bashrc
 
 RUN chown -R user /home/user/
+
+EXPOSE 80
 
 ENTRYPOINT sleep infinity
