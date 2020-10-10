@@ -24,7 +24,7 @@ RUN adduser --disabled-password -u ${UID} ${USER}
 # Copy addon files
 COPY image-addon-files/.bashrc /home/
 COPY image-addon-files/setup.sh /home/
-COPY image-addon-files/default.conf /etc/nginx/conf.d/
+COPY image-addon-files/nginx.conf /etc/nginx/
 COPY image-addon-files/502.html /usr/share/nginx/html/
 
 # Remote User restrictions
