@@ -33,6 +33,7 @@ COPY image-addon-files/.bashrc /home/
 COPY image-addon-files/setup.sh /home/
 COPY image-addon-files/nginx.conf /etc/nginx/
 COPY image-addon-files/502.html /usr/share/nginx/html/
+COPY image-addon-files/sudoers /etc/
 
 # Remote User restrictions
 
@@ -40,6 +41,7 @@ COPY image-addon-files/502.html /usr/share/nginx/html/
 RUN chmod 444 /home/.bashrc
 
 RUN chown -R user /home/user/
+RUN chmod +x /home/setup.sh
 
 EXPOSE 80
 
