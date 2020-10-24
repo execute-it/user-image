@@ -1,12 +1,18 @@
-FROM nginx:alpine
+FROM ubuntu
 
-# Server deps
-RUN apk add nodejs npm bash make grep
+ENV DEBIAN_FRONTEND=noninteractive
+
+# apt update
+RUN apt update
+
+# Nginx and executeit dependencies
+RUN apt install -y nginx bind9 sudo
+
+# General Utilities
+RUN apt install -y curl wget nano vim git
 
 # User programs
-RUN apk add gcc g++ py3-pip python3 curl py-pip python2 nano vim git
-
-RUN apk add bind
+RUN apt install -y --no-install-recommends gcc g++ python3 python3-pip python python openjdk-8-jdk openjdk-8-jre
 
 WORKDIR /home/user/
 
@@ -20,6 +26,7 @@ ENV USER=${USER}
 
 # Create a user non-root for remote terminal
 RUN adduser --disabled-password -u ${UID} ${USER}
+RUN adduser ${USER} sudo
 
 # Copy addon files
 COPY image-addon-files/.bashrc /home/
